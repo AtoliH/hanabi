@@ -172,9 +172,10 @@ print("Theme is: ", html_theme)
 html_logo = "../../src/icons/hanabi.png"
 
 # The name of an image file (relative to this directory) to use as a favicon of
-# the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+# the docs.
+# This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#
+
 html_favicon = "../../src/icons/hanabi.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -192,7 +193,7 @@ html_static_path = ['_static']
 # bottom, using the given strftime format.
 # The empty string is equivalent to '%b %d, %Y'.
 #
-html_last_updated_fmt = "%b %d, %Y ("+html_theme+")"
+html_last_updated_fmt = "%b %d, %Y (" + html_theme + ")"
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.

@@ -44,7 +44,7 @@ class Cheater(AI):
         game = self.game
         playable = [(i + 1, card.number) for (i, card) in
                     enumerate(game.current_hand.cards)
-                    if game.piles[card.color]+1 == card.number]
+                    if game.piles[card.color] + 1 == card.number]
 
         if playable:
             # sort by ascending number, then newest
@@ -58,7 +58,7 @@ class Cheater(AI):
             return "p%d" % playable[0][0]
 
         #
-        discardable = [i+1 for (i, card) in
+        discardable = [i + 1 for (i, card) in
                        enumerate(game.current_hand.cards)
                        if ((card.number <= game.piles[card.color])
                            or (game.current_hand.cards.count(card) > 1)
@@ -74,9 +74,10 @@ class Cheater(AI):
 
         # 2nd type of discard: I have a card, and my partner too
 
-        discardable2 = [i+1 for (i, card) in enumerate(game.current_hand.cards)
-                        if card in self.other_players_cards
-                        ]
+        discardable2 = [
+            i + 1 for (i, card) in enumerate(game.current_hand.cards)
+            if card in self.other_players_cards
+        ]
         if discardable2 and (game.blue_coins < 8):
             print('Cheater would discard2:', "d%d" %
                   discardable2[0], discardable2)
@@ -121,10 +122,10 @@ class Cheater(AI):
         # If reach here, can't play, can't discard safely
         # No blue-coin left.
         # Must discard a card. Let's choose a non-precious one (preferably a 4)
-        mynotprecious = [(card.number, i+1) for (i, card) in
+        mynotprecious = [(card.number, i + 1) for (i, card) in
                          enumerate(game.current_hand.cards)
                          if not (
-            (1+game.discard_pile.cards.count(card))
+            (1 + game.discard_pile.cards.count(card))
             == game.deck.card_count[card.number])
         ]
         mynotprecious.sort(key=lambda p: (-p[0], p[1]))
@@ -135,7 +136,7 @@ class Cheater(AI):
 
         # Oh boy, not even a safe discard, this is gonna hurt!
         # it's a loss. Discard the biggest
-        myprecious = [(card.number, i+1)
+        myprecious = [(card.number, i + 1)
                       for (i, card) in enumerate(game.current_hand.cards)]
         myprecious.sort(key=lambda p: (-p[0], p[1]))
         act = 'd%d' % myprecious[0][1]

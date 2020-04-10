@@ -4,12 +4,12 @@ Ascii-art fireworks.
 
 
 _fw1 = r"""
-    .\'/. 
+    .\'/.
    -= o =-
    .'/-\'.
-    .     
-   .      
-  .       
+    .
+   .
+  .
 """
 
 
@@ -23,7 +23,7 @@ def _mult(fw, n, space="  "):
     lines = fw.split('\n')
     nlines = []
     for line in lines:
-        nlines.append(space.join([line]*n))
+        nlines.append(space.join([line] * n))
     return "\n".join(nlines)
 
 

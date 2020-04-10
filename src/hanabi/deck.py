@@ -38,7 +38,7 @@ class Color(Enum):
         return self.name
 
     def __repr__(self):
-        return 'Color.'+self.name
+        return 'Color.' + self.name
 
     def colorize(self, *args):
         "Colorize the given string"
@@ -101,7 +101,7 @@ class Hand:
         "Pop a card from the hand, and draw a new one."
         if not 1 <= i <= len(self):
             raise ValueError("%d is not a valid card index." % i)
-        i = i-1   # back to 0-based-indices
+        i = i - 1   # back to 0-based-indices
         card = self.cards.pop(i)
         try:
             self.cards.append(self._deck.draw())
@@ -109,11 +109,14 @@ class Hand:
             pass  # deck is empty
         return card
 
-    def append(self, c): self.cards.append(c)
+    def append(self, c):
+        self.cards.append(c)
 
-    def sort(self): self.cards.sort(key=str)
+    def sort(self):
+        self.cards.sort(key=str)
 
-    def __len__(self): return len(self.cards)
+    def __len__(self):
+        return len(self.cards)
 
 
 class Deck:
@@ -220,11 +223,12 @@ class Game:
 
         self.current_player = None
         self.next_player()
-        self.last_player = None  # will be set to the last player, to allow last turn
 
+        # will be set to the last player, to allow last turn
+        self.last_player = None
         # I don't give it the deck, so it can't draw accidentaly a card
         self.discard_pile = Hand(None, 0)
-        self.piles = dict(zip(list(Color), [0]*len(Color)))
+        self.piles = dict(zip(list(Color), [0] * len(Color)))
 
         self.blue_coins = 8
         self.red_coins = 0
@@ -253,7 +257,7 @@ class Game:
                  "\n      this is what you see:")
         for player, hand in zip(self.players[1:], self.hands[1:]):
             self.log("%32s" % player, hand)
-            self.log(" "*32, hand.str_clue())
+            self.log(" " * 32, hand.str_clue())
 
         self.log("""What do you want to play?
         (d)iscard a card (12345)
@@ -332,7 +336,7 @@ class Game:
         self.log(self.current_player_name,
                  "tries to play", card, "... ", end="")
 
-        if (self.piles[card.color]+1 == card.number):
+        if (self.piles[card.color] + 1 == card.number):
             self.piles[card.color] += 1
             self.log("successfully!")
             self.log(card.color.colorize(
