@@ -86,7 +86,7 @@ class Cheater(AI):
         # Look at precious cards in other hand, to clue them
         precious = [card for card in
                     self.other_players_cards
-                    if (1+game.discard_pile.cards.count(card))
+                    if (1 + game.discard_pile.cards.count(card))
                     == game.deck.card_count[card.number]
                     ]
         if precious:
