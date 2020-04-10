@@ -6,7 +6,7 @@ class ColorTest(unittest.TestCase):
     def test_str(self):
         colors = [(31, "Red"), (32, "Green"), (34, "Blue"),
                   (33, "Yellow"), (37, "White")]
-        trouve = True
+        # trouve = True
         for (c, color) in colors:
             a = str(hanabi.deck.Color(c))
             self.assertEqual(a, color)
@@ -28,7 +28,7 @@ class CardTest(unittest.TestCase):
         self.assertEqual(c1, string_card)
 
     def test_number(self):
-        #self.assertRaises(hanabi.deck.Card('R', 7),  AssertionError)
+        # elf.assertRaises(hanabi.deck.Card('R', 7),  AssertionError)
         with self.assertRaises(AssertionError):
             hanabi.deck.Card('R', 7)
     # TODO: itertools.product to test that all cards are possible

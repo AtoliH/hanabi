@@ -37,7 +37,7 @@ jobs:
     - name: Format with pep8
       run : |
         pip install pep8
-        pep8 . --count --statistics --show-source --max-line-length=127 --ignore=W503
+        pep8 . --count --statistics --show-source --max-line-length=127 --ignore=W503,C901
     - name: Test with pytest
       run: |
         pip install pytest

@@ -22,7 +22,8 @@ class AI:
     def other_players_cards(self):
         "All of other players's cards, concatenated in a single list."
         # return sum([x.cards for x in self.other_hands], [])
-        return list(itertools.chain.from_iterable([hand.cards for hand in self.other_hands]))
+        cards = [hand.cards for hand in self.other_hands]
+        return list(itertools.chain.from_iterable(cards))
 
 
 class Cheater(AI):
@@ -32,14 +33,16 @@ class Cheater(AI):
     Algorithm:
       * if 1-or-more card is playable: play the lowest one, then newest one
       * if blue_coin<8 and an unnecessary card present: discard it.
-      * if blue_coin>0: give a clue on precious card (so a human can play with a Cheater)
-      * if blue_coin<8: discard the largest one, except if it's the last of its kind or in chop position in his opponent.
+      * if blue_coin>0: give a clue on precious card (so a human can play with
+      a Cheater)
+      * if blue_coin<8: discard the largest one, except if it's the last of its
+      kind or in chop position in his opponent.
     """
 
     def play(self):
         "Return the best cheater action."
         game = self.game
-        playable = [(i+1, card.number) for (i, card) in
+        playable = [(i + 1, card.number) for (i, card) in
                     enumerate(game.current_hand.cards)
                     if game.piles[card.color]+1 == card.number]
 
@@ -88,7 +91,8 @@ class Cheater(AI):
         if precious:
             clue = False
             # this loop is such that we prefer to clue an card close to chop
-            # would be nice to clue an unclued first, instead of a already clued
+            # would be nice to clue an unclued first, instead of
+            # an already clued
             for p in precious:
                 # print(p, p.number_clue, p.color_clue)
                 if p.number_clue is False:
@@ -96,7 +100,7 @@ class Cheater(AI):
                     break
                 if p.color_clue is False:
                     clue = "c%s" % p.color
-                    # quick fix, with 3+ players, can't clue cRed anymore, only cR
+                    # fix, with 3+ players, can't clue cRed anymore, only cR
                     clue = clue[:2]
                     break
                 # this one was tricky:
