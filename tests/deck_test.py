@@ -4,7 +4,7 @@ Unitary testin of Deck.
 
 import unittest
 
-from hanabi import Card, Color
+from hanabi.deck import Card, Color
 
 
 class DeckTest(unittest.TestCase):
