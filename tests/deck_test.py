@@ -4,7 +4,7 @@ Unitary testin of Deck.
 
 import unittest
 
-from Deck import Card, Color
+from deck import Card, Color
 
 
 class DeckTest(unittest.TestCase):
