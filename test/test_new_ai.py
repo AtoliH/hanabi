@@ -1,3 +1,4 @@
+import pytest
 pytest.skip("test not ready yet")
 # bien faire un "make module"
 
