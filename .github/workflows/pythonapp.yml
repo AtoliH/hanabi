@@ -34,9 +34,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Format with pep8
       run : |
-        pip install pep8
-        pep8 . --count --statistics --show-source --max-line-length=127 --ignore=W503,C901
+        pip install pycodestyle
+        pycodestyle . --count --statistics --show-source --max-line-length=127
     - name: Test with pytest
       run: |
         pip install pytest
+        cd tests
         pytest

@@ -47,7 +47,7 @@ class Color(Enum):
         "Colorize and convert to str the given args."
         s = ' '.join(map(str, args))
         if os.name == 'posix':
-            return '\033[%im'%self.value + s + '\033[0m'
+            return '\033[%im' % self.value + s + '\033[0m'
         else:
             # sorry, no colors on windows for the moment
             return s

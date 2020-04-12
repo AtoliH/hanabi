@@ -105,7 +105,6 @@ class GameTest(unittest.TestCase):
     def test_play_R2_over_R1(self):
         pass
 
-
     # lines 295, 329
 
     # lines 329, 363
