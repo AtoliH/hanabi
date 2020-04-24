@@ -1,7 +1,7 @@
-import hanabi
+import ai
 import random as rd
 
-class Random(hanabi.AI):
+class Random(ai.AI):
 
 
 	def play(self):
