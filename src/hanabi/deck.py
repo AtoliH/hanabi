@@ -354,8 +354,12 @@ class Game:
         """Action: give a clue.
 
         clue[0] is within (12345RBGWY).
-        By default, the clue is given to the next player (backwards compatibility with 2 payers games).
-        If clue[1] is give it is the initial (ABCDE) or index (1234) oof the target player.
+        By default, the clue is given to the next player (backwards compatibility with 2 players games).
+        If clue[1] is given it is the initial (ABCDE) or index (1234) oof the target player.
+        For example, 'R' gives the hint "Red" to the next player on the left, and 'B3' gives the hint "Blue" to the third player on the
+        left. 
+
+
         """
 
         hint = clue[0].upper()  # so cr is valid to clue Red
