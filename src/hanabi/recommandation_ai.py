@@ -3,6 +3,21 @@ import numpy as np
 
 class Recommandation(hanabi.ai.AI):
 
+
+	def __init__(self, game):
+		hanabi.ai.AI.__init__(self, game)
+
+		self.recommandation_list = {}
+		self.played_cards = {}
+
+		for player_name in self.game.players :
+			self.recommandation_list[player_name] = " "
+			self.played_cards[player_name] = 0
+
+
+
+
+
 	def card_status(self):
 		game = self.game
 
@@ -16,7 +31,8 @@ class Recommandation(hanabi.ai.AI):
 		other_hands = self.other_hands  
 
 		for i in range(len(other_hands)):
-			for j in range(len(other_hands[0])):
+			for j in range(len(other_hands[i])):  #Quand il n'y a plus de cartes dans la pioche, les joueurs n'ont pas forcément
+			#le même nombre de cartes
 
 
 				card = other_hands[i].cards[j]
@@ -52,7 +68,7 @@ class Recommandation(hanabi.ai.AI):
 
 			#Liste des cartes jouables par le joueur i
 			playable = []
-			for k in range(len(other_hands[0])):
+			for k in range(len(other_hands[i])):
 				card = other_hands[i].cards[k]
 				if self.list_status[i][k] == 1 :
 					playable.append((k, card.number))
@@ -85,7 +101,7 @@ class Recommandation(hanabi.ai.AI):
 
 				discardable = [] #Liste des cartes défaussables
 
-				for a in range(len(other_hands[0])):
+				for a in range(len(other_hands[i])):
 					card = other_hands[i].cards[a]
 					if self.list_status[i][a] == 0:
 						discardable.append((a, card.number))
@@ -97,7 +113,7 @@ class Recommandation(hanabi.ai.AI):
 
 					non_indisp = [] #Liste des cartes non-indispensables
 
-					for b in range(len(other_hands[0])):
+					for b in range(len(other_hands[i])):
 						card = other_hands[i].cards[b]
 						if self.list_status[i][b] == 3:
 							non_indisp.append((b, card.number))
@@ -120,7 +136,103 @@ class Recommandation(hanabi.ai.AI):
 		self.card_status()
 		self.other_players_actions()
 
-		
+
+		current_player_name = game.current_player_name[4:-4]
+
+
+		# Premier cas : il a été recommandé de jouer une carte, et aucune carte n'a été posée depuis
+		if self.recommandation_list[current_player_name][0] == 'p' and self.played_cards[current_player_name] == 0: 
+
+
+			card_to_play = str(int(self.recommandation_list[current_player_name][1]) + 1)
+			self.recommandation_list[current_player_name] = " "  # On réinitialise la recommandation une fois qu'on l'a jouée
+			
+			for player_name in game.players:
+				if player_name != current_player_name:
+					self.played_cards[player_name] += 1  #On mémorise le fait qu'une carte a été jouée
+
+			return("p" + card_to_play)
+
+
+		#Deuxième cas : il a été recommandé de jouer une carte, mais un autre joueur a posé une carte depuis.
+		#On vérifie alors que les joueurs peuvent se permettre une erreur
+		elif self.recommandation_list[current_player_name][0] == 'p' and game.red_coins <= 1 and self.played_cards[current_player_name] <= 1:
+
+			card_to_play = str(int(self.recommandation_list[current_player_name][1]) + 1)
+			self.recommandation_list[current_player_name] = " "  # On réinitialise la recommandation une fois qu'on l'a jouée
+			
+			for player_name in game.players:
+				if player_name != current_player_name:
+					self.played_cards[player_name] += 1
+			return("p" + card_to_play)
+
+
+		#Troisième cas : on va donner un indice
+		elif game.blue_coins != 0:
+
+			s = 0
+			for i in range(len(self.actions)):
+				if self.actions[i][1] == 'p':
+					s += self.actions[i][0]   # S'il faut jouer la carte, le numéro de l'action correspond à l'indice de la carte
+
+				else:
+					s += self.actions[i][0] + 4  # S'il faut défausser une carte, il faut ajouter 4 à l'indice de la carte en question
+
+			t = s % 8  #Numéro donnant le joueur concerné par l'indice, ainsi que le type de ce dernier (couleur ou valeur)
+
+			if t <= 3:  # Il s'agit d'un indice de valeur
+				for card in self.other_hands[t].cards :
+					if not card.number_clue:
+						clue = card.number
+						res = 'c' + str(clue) + str(t + 1)
+
+				
+			else:
+				for card in self.other_hands[t-4].cards:
+					if not card.color_clue:
+						clue = card.color
+						res = 'c' + str(clue)[0] + str(t - 3)
+
+			# La partie qui suit met à jour les recommandations pour chaque joueur
+
+			current_player_index = game.players.index(current_player_name)
+
+			for j in range(4):
+
+				player = game.players[(current_player_index + j + 1) % 5]
+				"""Permet de retrouver le nom du joueur qui est en position j par rapport au joueur courant"""
+
+				if self.actions[j][1] == 'p':
+					sum_actions = s - self.actions[j][0]
+				else :
+					sum_actions = s - (self.actions[i][0] + 4)
+
+				sum_actions = sum_actions % 8
+				recommandation_number = (t - sum_actions) % 8
+
+				if recommandation_number <= 3:
+					self.recommandation_list[player] = 'p' + str(recommandation_number)
+				else :
+					self.recommandation_list[player] = 'd' + str(recommandation_number % 4)
+
+
+				self.played_cards[player] = 0
+			
+
+			return(res)
+
+		elif self.recommandation_list[current_player_name][0] == 'd':
+			return("d" + str(int(self.recommandation_list[current_player_name][1]) + 1))
+
+		else : 
+			return("d1")
+
+
+
+
+
+
+
 
 				
 
