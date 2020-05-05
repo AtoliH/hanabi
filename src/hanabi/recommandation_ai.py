@@ -181,6 +181,8 @@ class Recommandation(hanabi.ai.AI):
 			t = s % 8  #Numéro donnant le joueur concerné par l'indice, ainsi que le type de ce dernier (couleur ou valeur)
 
 			if t <= 3:  # Il s'agit d'un indice de valeur
+				first_card = self.other_hands[t].cards[0]
+				res = 'c' + str(first_card.number) + str(t + 1)
 				for card in self.other_hands[t].cards :
 					if not card.number_clue:
 						clue = card.number
@@ -188,6 +190,8 @@ class Recommandation(hanabi.ai.AI):
 
 				
 			else:
+				first_card = self.other_hands[t-4].cards[0]
+				res = 'c' + str(first_card.number) + str(t - 3)
 				for card in self.other_hands[t-4].cards:
 					if not card.color_clue:
 						clue = card.color
