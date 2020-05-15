@@ -1,0 +1,63 @@
+Stratégie par recommandation :
+
+Les actions à réaliser sont numérotées de 0 à 7 :
+
+0- Jouer carte c1
+1- Jouer carte c2
+2- Jouer carte c3
+3- Jouer carte c4
+4- Défausser carte c1
+5- Défausser carte c2
+6- Défausser carte c3
+7- Défausser carte c4
+
+On établit ensuite un ordre de priorité entre ces actions. De cette façon, à un joueur est toujours donnée la même recommandation, quel que soit le joueur courant. 
+
+Pour savoir que recommander, le joueur courant doit :
+
+1- Répertorier le numéro de l'action qu'il doit recommander à chacun des autres joueurs, en respectant l'ordre de priorité établi. 
+
+2- Sommer ces valeurs et réduire le résultat modulo 8. Cette valeur permet alors de déterminer ce qu'il doit faire selon la liste ci dessous :
+	0- Indice de valeur au joueur en position 1
+	1- Indice de valeur au joueur en position 2
+	2- Indice de valeur au joueur en position 3
+	3- Indice de valeur au joueur en position 4
+	4- Indice de couleur au joueur en position 1
+	5- Indice de couleur au joueur en position 2
+	6- Indice de couleur au joueur en position 3
+	7- Indice de couleur au joueur en position 4
+
+3- Donner l'indice conformément à la liste ci-dessus
+
+
+
+Les joueurs auxquels n'a pas été donné l'indice peuvent alors en déduire l'action qui leur a été indirectement recommandée. 
+
+Pour cela, il faut :
+
+
+- Sommer les numéros des actions que les autres joueurs, sauf le joueur courant, doivent réaliser, en respectant toujours les priorités définies précédemment. 
+
+- Réduire cette valeur modulo 8
+
+- Retrancher cette valeur au numéro qui correspond au type d'indice qu'a donné le joueur courant (cf. liste ci-dessus)
+
+- La valeur ainsi obtenue correspond au numéro de l'action qui a été recommandée par le joueur courant
+
+
+Liste de priorité des actions du joueur courant :
+	1- Si la recommandation la plus récente était de jouer une carte et qu'aucune carte n'a été jouée depuis, jouer cette carte
+	2- Si la recommandation la plus récente était de jouer une carte, qu'une seule carte a été jouée depuis et que les joueurs ont fait moins de deux erreurs, jouer cette carte. 
+	3- S'il reste des jetons d'indice disponibles, donner un indice
+	4- Si la recommandation la plus récente était de défausser une carte, défausser cette carte.
+	5- Défausser la carte c1
+
+
+Liste de priorité des recommandations à donner en voyant une main :
+	1- Jouer la carte de rang 5 de plus petit indice, si elle est jouable
+	2- Jouer la carte jouable de plus petite valeur. En cas d'égalité, jouer celle de plus petit indice
+	3- Défausser la carte inutile de plus petit indice
+	4- Défausser la carte non indispensable de plus haute valeur. En cas d'égalité, défausser celle de plus petit indice. 
+	5- Défausser c1
+
+
