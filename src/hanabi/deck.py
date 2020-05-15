@@ -357,7 +357,7 @@ class Game:
         By default, the clue is given to the next player (backwards compatibility with 2 players games).
         If clue[1] is given it is the initial (ABCDE) or index (1234) oof the target player.
         For example, 'R' gives the hint "Red" to the next player on the left, and 'B3' gives the hint "Blue" to the third player on the
-        left. 
+        left.
 
 
         """
@@ -508,6 +508,35 @@ moves = %r
         # was simpler, but infinity-looped when user made a mistake
         while moves:
             self.turn(moves)
+
+
+def GamePlus(Game):
+    def run(self):
+        try:
+            last_players = list(self.players)
+            while last_players:
+                if len(self.deck.cards) == 0:
+                    self.log()
+                    self.log("--> Last turns:",
+                             " ".join(last_players),
+                             "may still play once.")
+                    try:
+                        last_players.remove(self.players[self.current_player])
+                    except ValueError:
+                        pass  # if Alice 'x', she is removed but plays again
+                self.turn(self.ai)
+                if self.score == 25:
+                    raise StopIteration("it is perfect!")
+#            self.log("Game finished because deck exhausted")
+        except (KeyboardInterrupt, EOFError, StopIteration) as e:
+            self.log('Game finished because of', e)
+            pass
+        self.save('autosave.py')
+
+        self.log("\nOne final glance at the table:")
+        self.log(self.starting_deck)
+        self.print_piles()
+
 
 
 if __name__ == "__main__":
