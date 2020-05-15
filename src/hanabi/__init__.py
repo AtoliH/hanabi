@@ -1,1 +1,1 @@
-from .deck import Deck, Game
+from .deck import Deck, Game, GamePlus
