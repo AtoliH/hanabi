@@ -20,12 +20,12 @@ class Recommandation(hanabi.ai.AI):
     def card_status(self):
         game = self.game
 
-        # Contient le statut de la jème carte du ième joueur
-        # 0 : défaussable
-        # 1 : jouable
-        # 2 : indispensable
-        # 3 : non-indispensable
-        self.list_status = np.zeros((4, 4))
+        """Contient le statut de la jème carte du ième joueur
+        0 : défaussable
+        1 : jouable
+        2 : indispensable
+        3 : non-indispensable
+        self.list_status = np.zeros((4, 4))"""
 
         other_hands = self.other_hands
 
@@ -55,9 +55,9 @@ class Recommandation(hanabi.ai.AI):
         return deck.card_count[card.number] == discard.cards.count(card) + 1
 
     def other_players_actions(self):
-        # Retourne une liste de couples, un pour chaque joueur, comprenant
-        # l'indice de la carte (en commençant à 0) et une lettre
-        # déterminant s'il faut la jouer ou la défausser
+        """Retourne une liste de couples, un pour chaque joueur, comprenant
+        l'indice de la carte (en commençant à 0) et une lettre
+        déterminant s'il faut la jouer ou la défausser"""
 
         other_hands = self.other_hands
 
@@ -78,9 +78,10 @@ class Recommandation(hanabi.ai.AI):
             else:
                 self.hint_discard(other_hands[i].cards, self.list_status[i])
 
-    """Donne un indice sur la carte à jouer suivant une liste de cartes
-    """
+    
     def hint_play(self, cards):
+        """Donne un indice sur la carte à jouer suivant une liste de cartes
+    """
         j = 0
         was_found = False
         while j < len(cards) and not(was_found):
@@ -103,6 +104,8 @@ class Recommandation(hanabi.ai.AI):
                 self.actions.append((card_index, 'p'))
 
     def hint_discard(self, cards, status):
+        """Retourne un indice sur la carte à défausser"""
+
         discardable = []  # Liste des cartes défaussables
 
         for a in range(len(cards)):
