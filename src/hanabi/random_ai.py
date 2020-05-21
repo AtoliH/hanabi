@@ -7,6 +7,6 @@ class Random(hanabi.ai.AI):
 
 	def play(self):
 		index = rd.randint(0, 3)
-		return("p" + str(index))
+		return("d" + str(index))
 
 

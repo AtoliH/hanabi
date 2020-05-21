@@ -30,18 +30,11 @@ Pour répondre à ces exigences, nous avons choisi d'utiliser des dictionnaires 
             self.recommandation_list[player_name] = " "
             self.played_cards[player_name] = 0
 ```
-S'est posé également un problème pour retrouver le nom du joueur courant, puisque la variable `game.current_player_name` contient un objet qui ressemble à `\x1b[1mAlice\x1b[0m`
+S'est posé également un problème pour retrouver le nom du joueur courant, puisque la variable `game.current_player_name` contient un objet qui ressemble à `\x1b[1mAlice\x1b[0m` et qui n'est donc pas une chaîne de caractères. Nous avons utilisé la syntaxe `game.current_player_name[4:-4]` pour retrouver une chaîne de caractères. 
 
 ## Tests unitaires ou de non-régression
 
-Présentez quelques (disons 2) tests unitaires.
-Dans l'idéal, pour celles et ceux qui sont tombés sur un (gros) bug qui leur a pris du temps, il devrait y avoir un test unitaire qui protège contre sa réapparition.
-
-Exemple :
-
-- Le test `game_42.py` replace la partie dans une situation où l'AI est obligée de défausser une carte précieuse ; je veux garantir que c'est le 5 vert parce que celle celui qui fait perdre le moins de points.
-
-- Le test `fin_de_partie.py` vérifie que les noms des joueurs sont les bons sur le dernier tour de jeu, parce que dans [telle situation...] ça n'avait pas été le cas.
+Pas de tests unitaires pour le moment. 
 
 
 
