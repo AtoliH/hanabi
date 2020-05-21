@@ -8,7 +8,8 @@ import numpy as np
 
 class Recommandation(hanabi.ai.AI):
     def __init__(self, game):
-        hanabi.ai.AI.__init__(self, game)
+        # hanabi.ai.AI.__init__(self, game)
+        super().__init__(game)
 
         self.recommandation_list = {}
         self.played_cards = {}
@@ -24,8 +25,8 @@ class Recommandation(hanabi.ai.AI):
         0 : défaussable
         1 : jouable
         2 : indispensable
-        3 : non-indispensable
-        self.list_status = np.zeros((4, 4))"""
+        3 : non-indispensable"""
+        self.list_status = np.zeros((4, 4))
 
         other_hands = self.other_hands
 
@@ -211,7 +212,7 @@ class Recommandation(hanabi.ai.AI):
             for j in range(4):
 
                 player = game.players[(current_player_index + j + 1) % 5]
-                """Permet de retrouver le nom du joueur qui est en position j par rapport au joueur courant"""
+                #Permet de retrouver le nom du joueur qui est en position j par rapport au joueur courant
 
                 if self.actions[j][1] == 'p':
                     sum_actions = s - self.actions[j][0]
