@@ -11,10 +11,11 @@ class InformationAi(hanabi.ai.AI):
         hanabi.ai.AI.__init__(self, game)
 
         self.tables = {}
+        
 
         for player_name in game.players :  #Création d'une table par joueur
-            self.tables[player_name] = 5*[5*[5*[True]]]
-
+            self.tables[player_name] = np.ones((4, 5, 5))
+            
         self.colors = {}
         self.colors[Color.Blue] = 0
         self.colors[Color.Green] = 1
@@ -105,10 +106,11 @@ class InformationAi(hanabi.ai.AI):
 
 
 
-    def targeted_card(self, player_table) :
+    def targeted_card(self, player, position) :
         '''Retourne l'indice de la carte du joueur qui a la plus grande probabilité d'être jouable'''
 
-        n = len(player_table)
+        player_table = self.tables[player]
+        n = len(self.other_hands[position])
         prob=[]
 
         for i in range(n):
@@ -122,15 +124,15 @@ class InformationAi(hanabi.ai.AI):
     def count_possibilities(self, table) :
         '''Retourne le nombre de possibilités pour une carte, à partir de sa table'''
 
-        n = len(table)
-        s = 0
+        # n = len(table)
+        # s = 0
 
-        for i in range(n):
-            for color in self.colors:
-                if table[self.colors[color]]:
-                    s += 1
+        # for i in range(n):
+        #     for color in self.colors:
+        #         if table[self.colors[color]][i] == 1:
+        #             s += 1
 
-        return(s)
+        return(int(np.sum(table)))
 
     def num_status_card(self, table, status):
         '''Retourne le nombre de possibilités qui ont le statut status (en l'occurence 1 pour jouable, 0 pour morte)'''
@@ -140,7 +142,7 @@ class InformationAi(hanabi.ai.AI):
 
         for i in range(n):
             for color in self.colors :
-                    if table[self.colors[color]][i]:
+                    if table[self.colors[color]][i] == 1:
 
                         card = Card(color, i+1)
                         if self.card_status(card) == status:
@@ -162,7 +164,10 @@ class InformationAi(hanabi.ai.AI):
         for i in range(len(table)):
             for k in range(len(table)):
 
-                partition[i][k] = table[i][k]
+                if table[i][k]:
+                    partition[i][k] = table[i][k]
+                else :
+                    partition[i][k] = 9
 
 
         
@@ -196,7 +201,7 @@ class InformationAi(hanabi.ai.AI):
             
                 self.hint = hint_set
 
-                if partition[self.colors[color]][i]:
+                if partition[self.colors[color]][i] == 1:
                     card = Card(color, i+1)
 
                     status = self.card_status(card)
@@ -212,7 +217,7 @@ class InformationAi(hanabi.ai.AI):
 
                     
                     else : 
-                        if hint_set < num_singletons: 
+                        if hint_set <= num_singletons: 
                             partition[self.colors[color]][i] = hint_set
                             hint_set += 1
 
@@ -221,13 +226,13 @@ class InformationAi(hanabi.ai.AI):
                             j += 1
 
                             if j % 8 == 0 :
-                                hint_set += 1  # Hors des singletons, les sets contiennet huuit cartes, et le dernier complète la table.
+                                hint_set += 1  # Hors des singletons, les sets contiennent huuit cartes, et le dernier complète la table.
         return(partition)
 
 
 
     def give_hint(self):
-        '''Retroune l'indice selon la stratégie de l'information'''
+        '''Retourne l'indice selon la stratégie de l'information et met à jour les tables des autres joueurs'''
 
         other_hands = self.other_hands
         game = self.game
@@ -235,25 +240,27 @@ class InformationAi(hanabi.ai.AI):
         current_player_name = game.current_player_name[4:-4]
         current_player_index = game.players.index(current_player_name)
 
+        hand_values = []
         list_targeted_cards = [] # Liste qui va contenir l'indice de chaque carte ciblée pour chaque joueur
         s = 0
 
         for j in range(4):
 
             player = game.players[(current_player_index + j + 1) % 5]
-            list_targeted_cards.append(self.targeted_card(self.tables[player]))
+            list_targeted_cards.append(self.targeted_card(player, j))
 
             card = other_hands[j].cards[list_targeted_cards[j]]  # Carte ciblée dans la main du joueur j
 
+            self.target = list_targeted_cards
 
-            partition = self.partition(self.tables[player][list_targeted_cards[j]])
+            partition = self.partition_table(self.tables[player][list_targeted_cards[j]]) # Partition de la table de la carte ciblée
 
-            hand_value = partition[self.colors[card.color]][card.number - 1]
-            s += hand_value
+            hand_values.append(partition[self.colors[card.color]][card.number - 1]) # Valeur qui a été attribuée par la partition à la carte ciblée
+            s += hand_values[j]
 
         t = s % 8
 
-        self.hint_number = s # A réutiliser dans update, donc stocké dans un attribut
+        t = int(t)
 
         if t <= 3:  # Il s'agit d'un indice de valeur
                 first_card = self.other_hands[t].cards[0]
@@ -264,84 +271,156 @@ class InformationAi(hanabi.ai.AI):
                         res = 'c' + str(clue) + str(t + 1)
 
 
-            else: # Indice de couleur
-                first_card = self.other_hands[t-4].cards[0]
-                res = 'c' + str(first_card.number) + str(t - 3)
-                for card in self.other_hands[t-4].cards:
-                    if not card.color_clue:
-                        clue = card.color
-                        res = 'c' + str(clue)[0] + str(t - 3)
+        else: # Indice de couleur
+            first_card = self.other_hands[t-4].cards[0]
+            res = 'c' + str(first_card.number) + str(t - 3)
+            for card in self.other_hands[t-4].cards:
+                if not card.color_clue:
+                    clue = card.color
+                    res = 'c' + str(clue)[0] + str(t - 3)
 
+
+
+        #Mise à jour des tables de possibilités
+
+        self.hints = [False, False, False, False]
+
+        for i in range(4):
+
+            player = game.players[(current_player_index + i + 1) % 5] # Nom du joueur situé à la position i par rapport au joueur courant
+
+            sum_actions = (s - hand_values[i]) % 8
+            hint = (t - sum_actions) % 8
+
+            partition = self.partition_table(self.tables[player][list_targeted_cards[i]])
+
+            # card = other_hands[i].cards[list_targeted_cards[i]]
+            # hint_cheat = partition[self.colors[card.color]][card.number - 1]
+
+            if hint in partition :
+                self.hints[i] = True
+
+
+            for k in range(len(partition)):
+                for l in range(len(partition)):
+
+
+                    if int(partition[k][l]) != hint:
+                        self.tables[player][list_targeted_cards[i]][k][l] = 0 #Toutes les cartes qui ne sont pas dans le set visé ne sont plus possibles
+
+                    
         return(res)
 
 
-        def update(self):
-            '''Met à jour la table des possibilités à partir de l'indice qui a été donné'''
+    def play(self):
+        '''Méthode globale pour faire jouer le robot'''
 
-            
+        game = self.game
+        current_player_name = game.current_player_name[4:-4]
+        table = self.tables[current_player_name]
+        
+        playable_found = False
+        dead_found = False
+        dispensable_found = False
+        duplicate_found = False
 
+        print(table)
 
+        for i in range(len(table)):
+            playable = True
+            dead = True
+            dispensable = True
+            duplicate = True
+            for color in self.colors:
+                for k in range(len(table[0])):
 
+                    if table[i][self.colors[color]][k] == 1:
 
+                        card = Card(color, k+1)
 
+                        if self.card_status(card) != 1:
+                            playable = False  # Il existe une possibilité de la carte i qui n'est pas jouable
 
+                        if self.card_status(card) != 0:
+                            dead = False
 
+                        if self.card_status(card) != 3 :
+                            dispensable = False
 
-
-
-
-
-
-                        
-
-
-
-
-
-
-
-
-
-
-                        
-
-
-
-
-
-
-
-
-
-
+                        if card not in self.other_players_cards :
+                            duplicate = False
 
 
 
+            if playable and not playable_found : 
+                index_playable = i
+                playable_found = True
 
+            if dead and not dead_found:
+                index_dead = i
+                dead_found = True
 
+            if dispensable and not dispensable_found :
+                index_dispensable = i
+                dispensable_found = True
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
+            if duplicate and not duplicate_found :
+                index_duplicate = i
+                duplicate_found = True
 
 
 
         
+        if playable_found :
+            index = index_playable
+            action = "p" + str(index_playable + 1)
+
+        elif dead_found and len(game.discard_pile) <= 5 :
+            index = index_dead
+            action = "d" + str(index_dead + 1)
+
+        elif game.blue_coins != 0 :
+            hint = self.give_hint()
+            action = hint
+
+        elif dead_found :
+            index = index_dead
+            action = "d" + str(index_dead + 1)
+
+        elif duplicate_found :
+            index = index_duplicate
+            action = "d" + str(index_duplicate + 1)
+
+        elif dispensable_found :
+            index = index_dispensable
+            action = "d" + str(index_dispensable + 1)
+
+        else : 
+            index = 0
+            action = "d1"
+
+
+        new_table = np.ones((4, 5, 5))
+
+        if action[0] != 'c' :
+
+            for a in range(3):
+
+                if a < index :
+                    new_table[a] = self.tables[current_player_name][a]
+                else : 
+                    new_table[a] = self.tables[current_player_name][a + 1]
+
+            self.tables[current_player_name] = new_table.copy()
+
+        
+        return(action)
+
+
+
+
+
+
+
+
+
