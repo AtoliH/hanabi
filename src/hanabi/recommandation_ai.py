@@ -27,7 +27,6 @@ class Recommandation(hanabi.ai.AI):
 
         game = self.game
         status_list = np.zeros((4, 4))
-
         other_hands = self.other_hands
 
         for i in range(len(other_hands)):
@@ -57,9 +56,9 @@ class Recommandation(hanabi.ai.AI):
         return deck.card_count[card.number] == discard.cards.count(card) + 1
 
     def other_players_actions(self):
-        # Retourne une liste de couples, un pour chaque joueur, comprenant
-        # l'indice de la carte (en commençant à 0) et une lettre
-        # déterminant s'il faut la jouer ou la défausser
+        """Retourne une liste de couples, un pour chaque joueur, comprenant
+        l'indice de la carte (en commençant à 0) et une lettre
+        déterminant s'il faut la jouer ou la défausser"""
 
         other_hands = self.other_hands
 
