@@ -104,6 +104,7 @@ class Recommandation(hanabi.ai.AI):
                 for p in range(len(cards)):
                     if cards[p][1] < min_card_number:
                         card_index = cards[p][0]
+                        min_card_number = cards[p][1]
                 was_found = True
                 self.actions.append((card_index, 'p'))
 
@@ -145,7 +146,7 @@ class Recommandation(hanabi.ai.AI):
                 self.actions.append((0, 'd'))
 
     def update_recommendations(self, player_name, actions_total, hint_id):
-        '''Met à jour les recommandations pour chaque joueur'''
+        """Met à jour les recommandations pour chaque joueur"""
 
         current_player_index = self.game.players.index(player_name)
 
@@ -166,7 +167,7 @@ class Recommandation(hanabi.ai.AI):
             self.played_cards[player] = 0
 
     def give_hint(self, current_player_name):
-        '''Donne un indice suivant les règles établies par la stratégie'''
+        """Donne un indice suivant les règles établies par la stratégie"""
         s = 0
         for i in range(len(self.actions)):
             # S'il faut jouer la carte, le numéro de l'action correspond à
