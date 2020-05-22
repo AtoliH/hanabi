@@ -47,13 +47,13 @@ class TestRecommendationStrategy(unittest.TestCase):
             Card(Color.Blue, 1)
         ])
 
-        # Jouer la carte jouable de plus grande valeur, puis de plus petit
+        # Jouer la carte jouable de plus petite valeur, puis de plus petit
         # indice
         piles[Color.White] = 3
 
         test_action(ai, (1, 'p'), piles, [
-            Card(Color.Red, 1),
             Card(Color.White, 4),
+            Card(Color.Red, 1),
             Card(Color.Blue, 1),
             Card(Color.Green, 1)
         ])
