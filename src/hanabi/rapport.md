@@ -30,7 +30,22 @@ Pour répondre à ces exigences, nous avons choisi d'utiliser des dictionnaires 
             self.recommandation_list[player_name] = " "
             self.played_cards[player_name] = 0
 ```
-S'est posé également un problème pour retrouver le nom du joueur courant, puisque la variable `game.current_player_name` contient un objet qui ressemble à `\x1b[1mAlice\x1b[0m` et qui n'est donc pas une chaîne de caractères. Nous avons utilisé la syntaxe `game.current_player_name[4:-4]` pour retrouver une chaîne de caractères. 
+
+La stratégie d'information a posé un autre problème, celui de l'attribution des tables de possibilités. En effet, à chaque fois qu'un joueur sort une carte de sa main, la nouvelle carte piochée est ajoutée à la fin de la main du joueur. Il faut donc réaffecter les tables, puisque les cartes ont changé de position :
+
+```python 
+	if action[0] != 'c' : # Si on a joué ou défaussé une carte, il faut réattribuer les tables de possibilités
+
+            for a in range(3):
+
+                if a < index :
+                    new_table[a] = self.tables[current_player_name][a]
+                else : 
+                    new_table[a] = self.tables[current_player_name][a + 1]
+
+            self.tables[current_player_name] = new_table.copy()
+```
+
 
 ## Tests unitaires ou de non-régression
 
