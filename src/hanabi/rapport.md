@@ -34,8 +34,7 @@ S'est posé également un problème pour retrouver le nom du joueur courant, pui
 
 ## Tests unitaires ou de non-régression
 
-Pas de tests unitaires pour le moment. 
-
+Une batterie des tests unitaire a été écrite afin de prévenir la régression du comportement de l'IA Recommandation vis à vis des indices qu'elle donne. On s'assure ainsi que la priorité des actions a effectuer est bien respectée. Par exemple si une carte de rang 5 peut être jouée celle-ci doit être jouée.
 
 
 ## Tests en série - statistiques - analyse des résultats
@@ -63,7 +62,9 @@ Les parties qui finissent à moins de 25 points sont aussi intéressantes à ana
 
 ### AI Recommendation
 
-Idem, expliquez ce que vous avez fait pour cette 2e AI.
+Le score moyen obtenu par cette IA est 22,2. Ce score est proche de celui obtenu dans l'article mais reste légèrement moindre pour des raisons que l'on ignore.
+
+L'IA base ses actions sur des indices donnés par les autres joueurs suivant un code prédéterminé. Donner un indice de valeur ou de couleur a tel ou tel joueur a une certaine signification autre que simplement l'indice donné.
 
 
 ### AI Information
