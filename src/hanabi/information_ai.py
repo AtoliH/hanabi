@@ -58,50 +58,50 @@ class InformationAi(hanabi.ai.AI):
 
 
 
-    def deduce(self, card_table):
+    # def deduce(self, card_table):
 
-        """ Mise à jour des informations privées en voyant les mains des autres joueurs"""
+    #     """ Mise à jour des informations privées en voyant les mains des autres joueurs"""
 
-        self.game = game
-        other_hands = self.other_players_cards
-        # (sum_blue, sum_green, sum_red, sum_white, sum_yellow) = (0, 0, 0, 0, 0)
-        number_card_color = 10
+    #     self.game = game
+    #     other_hands = self.other_players_cards
+    #     # (sum_blue, sum_green, sum_red, sum_white, sum_yellow) = (0, 0, 0, 0, 0)
+    #     number_card_color = 10
 
-        sum_card_color = {Color.Blue : 0, Color.Green : 0, Color.Red : 0, Color.White : 0, Color.Yellow : 0}
-        sum_card_number = {1 : 0, 2 : 0, 3 : 0, 4 : 0, 5 : 0}
+    #     sum_card_color = {Color.Blue : 0, Color.Green : 0, Color.Red : 0, Color.White : 0, Color.Yellow : 0}
+    #     sum_card_number = {1 : 0, 2 : 0, 3 : 0, 4 : 0, 5 : 0}
 
         
 
-        for card in other_hands:
+    #     for card in other_hands:
                 
-            if game.deck.card_count[card.number] == game.discard_pile.cards.count(card) + other_hands.count(card):
-                card_table[card.color][card.number] = False
+    #         if game.deck.card_count[card.number] == game.discard_pile.cards.count(card) + other_hands.count(card):
+    #             card_table[card.color][card.number] = False
 
-            sum_card_color[card.color] += 1
-            sum_card_number[card.number] += 1
+    #         sum_card_color[card.color] += 1
+    #         sum_card_number[card.number] += 1
 
 
 
-        for card in game.discard_pile.cards :
+    #     for card in game.discard_pile.cards :
 
-            sum_card_color[card.color] += 1
-            sum_card_number[card.number] += 1
+    #         sum_card_color[card.color] += 1
+    #         sum_card_number[card.number] += 1
 
         
-        for color in sum_card_color:
+    #     for color in sum_card_color:
 
-            sum_card_color[color] += game.piles[color]
+    #         sum_card_color[color] += game.piles[color]
 
-            if sum_card[color] == number_card_color:
-                card_table[color] = 5*[False]
+    #         if sum_card[color] == number_card_color:
+    #             card_table[color] = 5*[False]
 
-            for number in sum_card_number:
-                if game.piles[color] >= number:
-                    sum_card_number[number] += 1
+    #         for number in sum_card_number:
+    #             if game.piles[color] >= number:
+    #                 sum_card_number[number] += 1
 
-                if sum_card_number[number] == game.deck.card_count[number] :
-                    for k in range(card_table):
-                        card_table[k][number] = 5*[False]
+    #             if sum_card_number[number] == game.deck.card_count[number] :
+    #                 for k in range(card_table):
+    #                     card_table[k][number] = 5*[False]
 
 
 
@@ -283,8 +283,6 @@ class InformationAi(hanabi.ai.AI):
 
         #Mise à jour des tables de possibilités
 
-        self.hints = [False, False, False, False]
-
         for i in range(4):
 
             player = game.players[(current_player_index + i + 1) % 5] # Nom du joueur situé à la position i par rapport au joueur courant
@@ -294,19 +292,17 @@ class InformationAi(hanabi.ai.AI):
 
             partition = self.partition_table(self.tables[player][list_targeted_cards[i]])
 
-            # card = other_hands[i].cards[list_targeted_cards[i]]
-            # hint_cheat = partition[self.colors[card.color]][card.number - 1]
-
-            if hint in partition :
-                self.hints[i] = True
-
-
             for k in range(len(partition)):
                 for l in range(len(partition)):
 
 
                     if int(partition[k][l]) != hint:
                         self.tables[player][list_targeted_cards[i]][k][l] = 0 #Toutes les cartes qui ne sont pas dans le set visé ne sont plus possibles
+
+            # print(self.tables[player][list_targeted_cards[i]])
+
+            if np.sum(self.tables[player][list_targeted_cards[i]]) == 0:
+                raise Exception("Table vide")
 
                     
         return(res)
@@ -323,8 +319,6 @@ class InformationAi(hanabi.ai.AI):
         dead_found = False
         dispensable_found = False
         duplicate_found = False
-
-        print(table)
 
         for i in range(len(table)):
             playable = True
@@ -402,7 +396,7 @@ class InformationAi(hanabi.ai.AI):
 
         new_table = np.ones((4, 5, 5))
 
-        if action[0] != 'c' :
+        if action[0] != 'c' : # Si on a joué ou défaussé une carte, il faut réattribuer les tables de possibilités
 
             for a in range(3):
 
