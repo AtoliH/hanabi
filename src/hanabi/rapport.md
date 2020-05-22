@@ -62,6 +62,8 @@ C'est le morceau le plus important de ce rapport.
 
 Le score moyen obtenu par cette IA est 22,2. Ce score est proche de celui obtenu dans l'article mais reste légèrement moindre pour des raisons que l'on ignore.
 
+![Histogramme de la stratégie de recommandation](https://github.com/AtoliH/hanabi/blob/Guillaume/src/hanabi/stats_recommandation_ai.png)
+
 L'IA base ses actions sur des indices donnés par les autres joueurs suivant un code prédéterminé. Donner un indice de valeur ou de couleur a tel ou tel joueur a une certaine signification autre que simplement l'indice donné.
 
 
@@ -70,7 +72,7 @@ L'IA base ses actions sur des indices donnés par les autres joueurs suivant un 
 Le script `stats_information_ai.py` lance le robot 1000 fois. 
 Pour le moment, le score moyen obtenu est 23.3. Par comparaison, celui de l'article réalise un score moyen de 24.68. 
 
-![Histogramme de la stratégie de recommandation](https://github.com/AtoliH/hanabi/blob/Guillaume/src/hanabi/stats_information_ai.png)
+![Histogramme de la stratégie de l'information](https://github.com/AtoliH/hanabi/blob/Guillaume/src/hanabi/stats_information_ai.png)
 
 Dans notre programme, les joueurs prennent leur décision uniquement à partir des informations publiques, connues de tous les joueurs. Ils pourraient toutefois améliorer les informations qu'ils possèdent en utilisant des déductions privées, c'est-à-dire qu'ils sont les seuls à pouvoir faire, à partir notamment des mains des autres joueurs. 
 
