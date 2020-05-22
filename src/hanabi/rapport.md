@@ -30,34 +30,32 @@ Pour répondre à ces exigences, nous avons choisi d'utiliser des dictionnaires 
             self.recommandation_list[player_name] = " "
             self.played_cards[player_name] = 0
 ```
-S'est posé également un problème pour retrouver le nom du joueur courant, puisque la variable `game.current_player_name` contient un objet qui ressemble à `\x1b[1mAlice\x1b[0m` et qui n'est donc pas une chaîne de caractères. Nous avons utilisé la syntaxe `game.current_player_name[4:-4]` pour retrouver une chaîne de caractères. 
+
+La stratégie d'information a posé un autre problème, celui de l'attribution des tables de possibilités. En effet, à chaque fois qu'un joueur sort une carte de sa main, la nouvelle carte piochée est ajoutée à la fin de la main du joueur. Il faut donc réaffecter les tables, puisque les cartes ont changé de position :
+
+```python 
+	if action[0] != 'c' : # Si on a joué ou défaussé une carte, il faut réattribuer les tables de possibilités
+            for a in range(3):
+
+                if a < index :
+                    new_table[a] = self.tables[current_player_name][a]
+                else : 
+                    new_table[a] = self.tables[current_player_name][a + 1]
+
+            self.tables[current_player_name] = new_table.copy()
+```
+
 
 ## Tests unitaires ou de non-régression
 
 Une batterie des tests unitaire a été écrite afin de prévenir la régression du comportement de l'IA Recommandation vis à vis des indices qu'elle donne. On s'assure ainsi que la priorité des actions a effectuer est bien respectée. Par exemple si une carte de rang 5 peut être jouée celle-ci doit être jouée.
 
 
+
+
 ## Tests en série - statistiques - analyse des résultats
 
 C'est le morceau le plus important de ce rapport.
-
-### AI Cheater
-
-Le script `son_nom.py` lance l'AI 10000 fois.
-
-Le score moyen obtenu est [...] ; pour comparaison le Cheater de l'article fait en moyenne 24.87.
-
-Voici l'histogramme de nos résultats :
-![Histogramme de l'AI Cheater](images/mon_histogramme.png)
-
-à comparer avec celui (c) de l'article :
-![Les 3 histogrammes de l'article](images/histogrames_hatstrat.png)
-
-
-
-Important : pensez à analyser et discuter les différences entre vos résultats et l'article.
-En particulier, si vous faites mieux ou moins bien, quelles en sont les raisons, et des pistes d'amélioration.
-Les parties qui finissent à moins de 25 points sont aussi intéressantes à analyser.
 
 
 ### AI Recommendation
