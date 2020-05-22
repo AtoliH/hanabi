@@ -53,7 +53,7 @@ class Recommandation(hanabi.ai.AI):
         self.list_status = status_list
 
     def is_last_card(self, card, deck, discard):
-        """Retourne True si la carte est la dernière représente de sa couleur
+        """Retourne True si la carte est la dernière représentante de sa couleur
         et de sa valeur.
         """
         return deck.card_count[card.number] == discard.cards.count(card) + 1
@@ -226,6 +226,7 @@ class Recommandation(hanabi.ai.AI):
             action = self.give_hint(current_player_name)
         elif self.recommendation_list[current_player_name][0] == 'd':
             action = "d" + str(int(recommendation[1]) + 1)
+            self.recommendation_list[current_player_name] = " "
         else:
             action = "d1"
 

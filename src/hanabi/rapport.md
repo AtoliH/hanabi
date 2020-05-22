@@ -42,24 +42,6 @@ Pas de tests unitaires pour le moment.
 
 C'est le morceau le plus important de ce rapport.
 
-### AI Cheater
-
-Le script `son_nom.py` lance l'AI 10000 fois.
-
-Le score moyen obtenu est [...] ; pour comparaison le Cheater de l'article fait en moyenne 24.87.
-
-Voici l'histogramme de nos résultats :
-![Histogramme de l'AI Cheater](images/mon_histogramme.png)
-
-à comparer avec celui (c) de l'article :
-![Les 3 histogrammes de l'article](images/histogrames_hatstrat.png)
-
-
-
-Important : pensez à analyser et discuter les différences entre vos résultats et l'article.
-En particulier, si vous faites mieux ou moins bien, quelles en sont les raisons, et des pistes d'amélioration.
-Les parties qui finissent à moins de 25 points sont aussi intéressantes à analyser.
-
 
 ### AI Recommendation
 
