@@ -209,10 +209,11 @@ class Recommandation(hanabi.ai.AI):
 
         allow_error = game.red_coins <= 1 and played_cards == 1
 
+        reset_recommendation = True
+
         # jouer une carte est recommandé et possible
         if recommendation[0] == 'p' and (played_cards == 0 or allow_error):
             card_to_play = int(recommendation[1]) + 1
-            self.recommendation_list[current_player_name] = " "
 
             for player_name in game.players:
                 if player_name != current_player_name:
@@ -224,6 +225,10 @@ class Recommandation(hanabi.ai.AI):
         elif self.recommendation_list[current_player_name][0] == 'd':
             action = "d" + str(int(recommendation[1]) + 1)
         else:
+            reset_recommendation = False
             action = "d1"
+
+        if reset_recommendation:
+            self.recommendation_list[current_player_name] = " "
 
         return action
