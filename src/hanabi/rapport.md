@@ -66,6 +66,18 @@ Les parties qui finissent à moins de 25 points sont aussi intéressantes à ana
 Idem, expliquez ce que vous avez fait pour cette 2e AI.
 
 
+### AI Information
+
+Le script `stats_information_ai.py` lance le robot 1000 fois. 
+Pour le moment, le score moyen obtenu est 23.3. Par comparaison, celui de l'article réalise un score moyen de 24.68. 
+
+![Histogramme de la stratégie de recommandation](https://github.com/AtoliH/hanabi/blob/Guillaume/src/hanabi/stats_information_ai.png)
+
+Dans notre programme, les joueurs prennent leur décision uniquement à partir des informations publiques, connues de tous les joueurs. Ils pourraient toutefois améliorer les informations qu'ils possèdent en utilisant des déductions privées, c'est-à-dire qu'ils sont les seuls à pouvoir faire, à partir notamment des mains des autres joueurs. 
+Ceci peut expliquer les performances moindres de notre programme. 
+
+
+
 ## Conclusion et perspectives
 
 Parce qu'il est toujours bon d'aider son lecteur à retenir les points importants,
