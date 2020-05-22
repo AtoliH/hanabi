@@ -6,9 +6,9 @@ Auteurs : Atoli Huppe, Guillaume Yon
 
 
 
-## Stratégie retenue
+## Stratégies retenues
 
-Mise en place de la stratégie de recommandation
+Mise en place de la stratégie de recommandation, puis de celle d'information
 
 ## Points techniques
 
