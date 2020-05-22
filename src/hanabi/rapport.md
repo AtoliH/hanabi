@@ -83,5 +83,9 @@ Ceci peut expliquer les performances moindres de notre programme.
 
 ## Conclusion et perspectives
 
-Parce qu'il est toujours bon d'aider son lecteur à retenir les points importants,
-et lui donner des nouvelles pistes de réflexion.
+La possession partielle d'informations dans le jeu de Hanabi permet la mise en place de stratégies qui visent à communiquer ces informations, tout en respectant les règles du jeu.
+Les stratégies de recommandation et d'information en sont deux exemples.
+Les performances de la stratégie d'information sont supérieures à celle obtenues avec la stratégie de recommandation, mais cette dernière reste plus simple à mettre en place.
+
+Dans tous les cas, les stratégies informatisées restent meilleures que des joueurs humains, grâce au traitement systématique des données et à leur stockage. 
+Une question importante, qui n'a pas de réponse pour le moment est : peut-on trouver une stratégie qui gagne pour "toutes" les parties ? 
