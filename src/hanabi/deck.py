@@ -510,7 +510,39 @@ moves = %r
             self.turn(moves)
 
 
-def GamePlus(Game):
+class GamePlus(Game):
+    def average_score():
+        """Retourne le score moyen obtenu par une IA."""
+        pass
+
+    def ai_stats(AI, N=100):
+        """Retourne des statistiques sur les performances d'une IA."""
+
+        S = 0
+        score = []
+
+        for i in range(N):
+            game = GamePlus(players=5)
+            ai = AI(game)
+
+            game.ai = ai
+            game.quiet = True
+            game.run()
+
+            S += game.score
+            score.append(game.score)
+
+        moy = S / N
+
+        bins = [x + 0.5 for x in range(10, 26)]
+
+        def draw_graph(plt):
+            plt.hist(score, edgecolor='red', bins=bins, rwidth=0.8,
+                     density=True)
+            plt.show()
+
+        return moy, draw_graph
+
     def run(self):
         try:
             last_players = list(self.players)
@@ -527,7 +559,7 @@ def GamePlus(Game):
                 self.turn(self.ai)
                 if self.score == 25:
                     raise StopIteration("it is perfect!")
-#            self.log("Game finished because deck exhausted")
+            # self.log("Game finished because deck exhausted")
         except (KeyboardInterrupt, EOFError, StopIteration) as e:
             self.log('Game finished because of', e)
             pass

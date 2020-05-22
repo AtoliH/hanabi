@@ -16,7 +16,7 @@ class Recommandation(hanabi.ai.AI):
             self.recommendation_list[player_name] = " "
             self.played_cards[player_name] = 0
 
-    def card_status(self):
+    def update_card_status(self):
         """Retourne une table contenant à la case (i,j) le statut de la jème
         carte du ième joueur
         0 : défaussable
@@ -50,9 +50,12 @@ class Recommandation(hanabi.ai.AI):
                 # La carte n'est pas indispensable
                 else:
                     status_list[i, j] = 3
-        return status_list
+        self.list_status = status_list
 
     def is_last_card(self, card, deck, discard):
+        """Retourne True si la carte est la dernière représente de sa couleur
+        et de sa valeur.
+        """
         return deck.card_count[card.number] == discard.cards.count(card) + 1
 
     def other_players_actions(self):
@@ -101,7 +104,6 @@ class Recommandation(hanabi.ai.AI):
                 for p in range(len(cards)):
                     if cards[p][1] > max_card_number:
                         card_index = cards[p][0]
-                was_found = True
                 self.actions.append((card_index, 'p'))
 
     def hint_discard(self, cards, status):
@@ -198,7 +200,7 @@ class Recommandation(hanabi.ai.AI):
 
     def play(self):
         game = self.game
-        self.list_status = self.card_status()
+        self.update_card_status()
         self.other_players_actions()
 
         current_player_name = game.current_player_name[4:-4]
