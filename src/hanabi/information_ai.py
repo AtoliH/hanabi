@@ -292,19 +292,16 @@ class InformationAi(hanabi.ai.AI):
 
             partition = self.partition_table(self.tables[player][list_targeted_cards[i]])
 
+            hint = hand_values[i]
+
             for k in range(len(partition)):
                 for l in range(len(partition)):
 
 
-                    if int(partition[k][l]) != hint:
+                    if partition[k][l] != hint:
                         self.tables[player][list_targeted_cards[i]][k][l] = 0 #Toutes les cartes qui ne sont pas dans le set visé ne sont plus possibles
 
-            # print(self.tables[player][list_targeted_cards[i]])
 
-            if np.sum(self.tables[player][list_targeted_cards[i]]) == 0:
-                raise Exception("Table vide")
-
-                    
         return(res)
 
 
