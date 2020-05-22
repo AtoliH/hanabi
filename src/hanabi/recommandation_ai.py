@@ -104,6 +104,7 @@ class Recommandation(hanabi.ai.AI):
                 for p in range(len(cards)):
                     if cards[p][1] < min_card_number:
                         card_index = cards[p][0]
+                was_found = True
                 self.actions.append((card_index, 'p'))
 
     def hint_discard(self, cards, status):
@@ -212,10 +213,11 @@ class Recommandation(hanabi.ai.AI):
 
         allow_error = game.red_coins <= 1 and played_cards == 1
 
+        reset_recommendation = True
+
         # jouer une carte est recommandé et possible
         if recommendation[0] == 'p' and (played_cards == 0 or allow_error):
             card_to_play = int(recommendation[1]) + 1
-            self.recommendation_list[current_player_name] = " "
 
             for player_name in game.players:
                 if player_name != current_player_name:
@@ -228,6 +230,10 @@ class Recommandation(hanabi.ai.AI):
             action = "d" + str(int(recommendation[1]) + 1)
             self.recommendation_list[current_player_name] = " "
         else:
+            reset_recommendation = False
             action = "d1"
+
+        if reset_recommendation:
+            self.recommendation_list[current_player_name] = " "
 
         return action
