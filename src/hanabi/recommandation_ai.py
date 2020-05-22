@@ -104,6 +104,7 @@ class Recommandation(hanabi.ai.AI):
                 for p in range(len(cards)):
                     if cards[p][1] < min_card_number:
                         card_index = cards[p][0]
+                was_found = True
                 self.actions.append((card_index, 'p'))
 
     def hint_discard(self, cards, status):
