@@ -55,7 +55,6 @@ Une batterie des tests unitaire a été écrite afin de prévenir la régression
 
 ## Tests en série - statistiques - analyse des résultats
 
-C'est le morceau le plus important de ce rapport.
 
 
 ### AI Recommendation
