@@ -99,10 +99,10 @@ class Recommandation(hanabi.ai.AI):
 
             # On a pas trouvé de carte de valeur 5 qui soit jouable
             if not(was_found):
-                max_card_number = cards[0][1]
+                min_card_number = cards[0][1]
                 card_index = cards[0][0]
                 for p in range(len(cards)):
-                    if cards[p][1] > max_card_number:
+                    if cards[p][1] < min_card_number:
                         card_index = cards[p][0]
                 self.actions.append((card_index, 'p'))
 

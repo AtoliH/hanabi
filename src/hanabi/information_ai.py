@@ -5,17 +5,17 @@ import numpy as np
 
 class InformationAi(hanabi.ai.AI):
 
-    
+
 
     def __init__(self, game):
         hanabi.ai.AI.__init__(self, game)
 
         self.tables = {}
-        
+
 
         for player_name in game.players :  #Création d'une table par joueur
             self.tables[player_name] = np.ones((4, 5, 5))
-            
+
         self.colors = {}
         self.colors[Color.Blue] = 0
         self.colors[Color.Green] = 1
@@ -23,7 +23,7 @@ class InformationAi(hanabi.ai.AI):
         self.colors[Color.White] = 3
         self.colors[Color.Yellow] = 4
 
-        
+
 
 
 
@@ -47,7 +47,7 @@ class InformationAi(hanabi.ai.AI):
             # self.list_status[i, j] = 0
             return(0)
 
-        elif game.deck.card_count[card.number] == game.discard_pile.cards.count(card) + 1: 
+        elif game.deck.card_count[card.number] == game.discard_pile.cards.count(card) + 1:
             #La carte est la dernière de son type (les autres ont été défaussées), il faut donc absolument la conserver
             # self.list_status[i, j] = 2
             return(2)
@@ -70,10 +70,10 @@ class InformationAi(hanabi.ai.AI):
         sum_card_color = {Color.Blue : 0, Color.Green : 0, Color.Red : 0, Color.White : 0, Color.Yellow : 0}
         sum_card_number = {1 : 0, 2 : 0, 3 : 0, 4 : 0, 5 : 0}
 
-        
+
 
         for card in other_hands:
-                
+
             if game.deck.card_count[card.number] == game.discard_pile.cards.count(card) + other_hands.count(card):
                 card_table[card.color][card.number] = False
 
@@ -87,7 +87,7 @@ class InformationAi(hanabi.ai.AI):
             sum_card_color[card.color] += 1
             sum_card_number[card.number] += 1
 
-        
+
         for color in sum_card_color:
 
             sum_card_color[color] += game.piles[color]
@@ -120,7 +120,7 @@ class InformationAi(hanabi.ai.AI):
         best_playable_card = prob.index(max(prob))
         return(best_playable_card)
 
-    
+
     def count_possibilities(self, table) :
         '''Retourne le nombre de possibilités pour une carte, à partir de sa table'''
 
@@ -151,7 +151,7 @@ class InformationAi(hanabi.ai.AI):
         return(num_status)
 
 
-    
+
 
     def partition_table(self, table) :
         '''Retourne un tableau contenant la partition de la table'''
@@ -170,7 +170,7 @@ class InformationAi(hanabi.ai.AI):
                     partition[i][k] = 9
 
 
-        
+
 
         num_dead_sets = 0
         if num_dead > 0:
@@ -198,7 +198,7 @@ class InformationAi(hanabi.ai.AI):
 
         for i in range(len(table)):  #On parcourt la table en colonnes (et pas en lignes)
             for color in self.colors:
-            
+
                 self.hint = hint_set
 
                 if partition[self.colors[color]][i] == 1:
@@ -206,7 +206,7 @@ class InformationAi(hanabi.ai.AI):
 
                     status = self.card_status(card)
 
-                    
+
                     if status == 0 : #Détection d'une carte morte
                         if first_dead_card: #Détection de la première carte morte
                             first_dead_card = False
@@ -215,13 +215,13 @@ class InformationAi(hanabi.ai.AI):
 
                         partition[self.colors[color]][i] = hint_dead_cards #Toutes les cartes mortes portent le même numéro d'indice
 
-                    
-                    else : 
-                        if hint_set <= num_singletons: 
+
+                    else :
+                        if hint_set <= num_singletons:
                             partition[self.colors[color]][i] = hint_set
                             hint_set += 1
 
-                        else : 
+                        else :
                             partition[self.colors[color]][i] = hint_set
                             j += 1
 
@@ -308,7 +308,7 @@ class InformationAi(hanabi.ai.AI):
                     if int(partition[k][l]) != hint:
                         self.tables[player][list_targeted_cards[i]][k][l] = 0 #Toutes les cartes qui ne sont pas dans le set visé ne sont plus possibles
 
-                    
+
         return(res)
 
 
@@ -318,7 +318,7 @@ class InformationAi(hanabi.ai.AI):
         game = self.game
         current_player_name = game.current_player_name[4:-4]
         table = self.tables[current_player_name]
-        
+
         playable_found = False
         dead_found = False
         dispensable_found = False
@@ -352,7 +352,7 @@ class InformationAi(hanabi.ai.AI):
 
 
 
-            if playable and not playable_found : 
+            if playable and not playable_found :
                 index_playable = i
                 playable_found = True
 
@@ -370,7 +370,7 @@ class InformationAi(hanabi.ai.AI):
 
 
 
-        
+
         if playable_found :
             index = index_playable
             action = "p" + str(index_playable + 1)
@@ -395,7 +395,7 @@ class InformationAi(hanabi.ai.AI):
             index = index_dispensable
             action = "d" + str(index_dispensable + 1)
 
-        else : 
+        else :
             index = 0
             action = "d1"
 
@@ -408,12 +408,12 @@ class InformationAi(hanabi.ai.AI):
 
                 if a < index :
                     new_table[a] = self.tables[current_player_name][a]
-                else : 
+                else :
                     new_table[a] = self.tables[current_player_name][a + 1]
 
             self.tables[current_player_name] = new_table.copy()
 
-        
+
         return(action)
 
 
